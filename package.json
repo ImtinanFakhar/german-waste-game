@@ -17,9 +17,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ImtinanFakhar/german-waste-separation.git"
+    "url": "https://github.com/ImtinanFakhar/german-waste-game.git"
   },
-  "homepage": "https://ImtinanFakhar.github.io/german-waste-separation-game",
+  "homepage": "https://ImtinanFakhar.github.io/german-waste-game",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
