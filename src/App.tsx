@@ -1,24 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, Trash2, Recycle, AlertCircle, MapPin, Info, Play, Trophy, AlertTriangle, RotateCcw } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDown, MapPin, Play, RotateCcw } from 'lucide-react';
+
+// Type definitions
+interface Bin {
+  id: string;
+  color: string;
+  name: string;
+  icon: string;
+  keywords: string[];
+}
+
+interface CityData {
+  name: string;
+  authority: string;
+  bins: Bin[];
+}
+
+interface TrashItem {
+  name: string;
+  emoji: string;
+  correctBin: string;
+  description: string;
+}
+
+interface Feedback {
+  type: 'success' | 'error';
+  message: string;
+  emoji: string;
+  points?: string;
+  fine?: string;
+  streak?: number;
+}
+
+interface Celebration {
+  points: number;
+  isStreak: boolean;
+  soundEffect: string;
+  id: number;
+}
+
+interface ThrownItem extends TrashItem {
+  targetBin: string;
+  isCorrect: boolean;
+}
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  rotation: number;
+  color: string;
+  speed: number;
+}
 
 const GermanWasteGame = () => {
-  const [selectedCity, setSelectedCity] = useState('');
-  const [gameStarted, setGameStarted] = useState(false);
-  const [currentTrashItem, setCurrentTrashItem] = useState(null);
-  const [score, setScore] = useState(0);
-  const [fines, setFines] = useState(0);
-  const [round, setRound] = useState(1);
-  const [feedback, setFeedback] = useState(null);
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [currentTrashItem, setCurrentTrashItem] = useState<TrashItem | null>(null);
+  const [score, setScore] = useState<number>(0);
+  const [fines, setFines] = useState<number>(0);
+  const [round, setRound] = useState<number>(1);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [gameStats, setGameStats] = useState({ correct: 0, wrong: 0 });
-  const [isThrowingAnimation, setIsThrowingAnimation] = useState(false);
-  const [thrownItem, setThrownItem] = useState(null);
-  const [characterState, setCharacterState] = useState('idle'); // idle, throwing, celebrating, disappointed
-  const [celebration, setCelebration] = useState(null);
-  const [streak, setStreak] = useState(0);
-  const [confetti, setConfetti] = useState([]);
+  const [isThrowingAnimation, setIsThrowingAnimation] = useState<boolean>(false);
+  const [thrownItem, setThrownItem] = useState<ThrownItem | null>(null);
+  const [characterState, setCharacterState] = useState<string>('idle'); // idle, throwing, celebrating, disappointed
+  const [celebration, setCelebration] = useState<Celebration | null>(null);
+  const [streak, setStreak] = useState<number>(0);
+  const [confetti, setConfetti] = useState<Particle[]>([]);
 
   // City data structure
-  const cityData = {
+  const cityData: Record<string, CityData> = {
     berlin: {
       name: 'Berlin',
       authority: 'BSR (Berliner Stadtreinigung)',
@@ -512,7 +564,7 @@ const GermanWasteGame = () => {
   };
 
   // Trash items with massive everyday expansion
-  const trashItems = {
+  const trashItems: Record<string, TrashItem> = {
     // Yellow bin items (Packaging)
     plastic_packaging: { name: 'Yogurt Cup', emoji: '🥛', correctBin: 'yellow', description: 'Plastic food container' },
     metal_packaging: { name: 'Tin Can', emoji: '🥫', correctBin: 'yellow', description: 'Metal food can' },
@@ -633,18 +685,17 @@ const GermanWasteGame = () => {
   };
 
   // Get available trash items for selected city
-  const getAvailableTrashItems = () => {
+  const getAvailableTrashItems = (): TrashItem[] => {
     if (!selectedCity || !cityData[selectedCity]) return [];
     
     const cityBins = cityData[selectedCity].bins;
-    const availableItems = [];
+    const availableItems: TrashItem[] = [];
     
-    cityBins.forEach(bin => {
-      bin.keywords.forEach(keyword => {
+    cityBins.forEach((bin: Bin) => {
+      bin.keywords.forEach((keyword: string) => {
         if (trashItems[keyword]) {
           availableItems.push({
             ...trashItems[keyword],
-            id: keyword,
             correctBin: bin.id === 'recycling_island' ? 'yellow' : bin.id
           });
         }
@@ -698,7 +749,7 @@ const GermanWasteGame = () => {
   };
 
   // Create celebration effects
-  const createCelebration = (points, isStreak = false) => {
+  const createCelebration = (points: number, isStreak = false) => {
     setCelebration({
       points,
       isStreak,
@@ -711,7 +762,7 @@ const GermanWasteGame = () => {
   };
 
   // Handle bin selection with throwing animation and celebrations
-  const handleBinSelection = (binId) => {
+  const handleBinSelection = (binId: string) => {
     if (!currentTrashItem || isThrowingAnimation) return;
     
     setIsThrowingAnimation(true);
@@ -798,7 +849,7 @@ const GermanWasteGame = () => {
   };
 
   // Get bin name by ID
-  const getBinName = (binId) => {
+  const getBinName = (binId: string) => {
     if (!selectedCity || !cityData[selectedCity]) return '';
     const bin = cityData[selectedCity].bins.find(b => b.id === binId);
     return bin ? bin.name : '';
@@ -1110,7 +1161,7 @@ const GermanWasteGame = () => {
                       }`}>
                         {feedback.points || feedback.fine}
                       </div>
-                      {feedback.streak >= 5 && (
+                      {feedback.streak && feedback.streak >= 5 && (
                         <div className="text-yellow-600 text-xs font-bold">
                           🎉 {feedback.streak}-Streak Bonus!
                         </div>
