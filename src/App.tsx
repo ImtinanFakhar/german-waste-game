@@ -1,28 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { 
   ChevronDown, 
   MapPin, 
   Play, 
   RotateCcw, 
   Trophy, 
-  Star, 
-  Home, 
-  Settings, 
   Volume2, 
   VolumeX,
   Share2,
-  Award,
   Target,
   Clock,
-  Zap,
-  Download,
   Github,
-  ExternalLink,
-  Info,
-  HelpCircle,
-  BarChart3,
-  Users,
-  Globe,
   Recycle
 } from 'lucide-react';
 
@@ -94,18 +82,8 @@ const GermanWasteGame = () => {
   const [streak, setStreak] = useState<number>(0);
   const [confetti, setConfetti] = useState<Particle[]>([]);
   
-  // New professional features
+  // Professional features
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [gameMode, setGameMode] = useState<'tutorial' | 'normal' | 'challenge'>('normal');
-  const [timeLeft, setTimeLeft] = useState<number>(0);
-  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
-  const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showInstructions, setShowInstructions] = useState<boolean>(false);
-  const [playerName, setPlayerName] = useState<string>('');
-  const [gameHistory, setGameHistory] = useState<any[]>([]);
-  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
-  const [perfectGames, setPerfectGames] = useState<number>(0);
-  const [totalGamesPlayed, setTotalGamesPlayed] = useState<number>(0);
 
   // City data structure
   const cityData: Record<string, CityData> = {
@@ -1051,22 +1029,6 @@ const GermanWasteGame = () => {
                 title={soundEnabled ? 'Mute sounds' : 'Enable sounds'}
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-              </button>
-
-              <button
-                onClick={() => setShowInstructions(true)}
-                className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600"
-                title="How to play"
-              >
-                <HelpCircle className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={() => setShowLeaderboard(true)}
-                className="p-2 rounded-lg bg-yellow-100 hover:bg-yellow-200 transition-colors text-yellow-600"
-                title="Leaderboard"
-              >
-                <BarChart3 className="w-4 h-4" />
               </button>
 
               <button
