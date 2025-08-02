@@ -6,7 +6,6 @@ import {
   Play, 
   RotateCcw, 
   Trophy, 
-  Star, 
   Volume2, 
   VolumeX,
   Share2,

@@ -13,7 +13,7 @@ import {
   Clock,
   Github,
   Recycle,
-  Globe
+
 } from 'lucide-react';
 import citiesData from './data/cities.json';
 
