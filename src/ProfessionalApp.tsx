@@ -15,7 +15,10 @@ import {
   HelpCircle,
   BarChart3,
   Recycle,
-  Award
+  Award,
+  Download,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 
 // Enhanced interfaces
@@ -98,6 +101,8 @@ const ProfessionalWasteGame = () => {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [totalGamesPlayed, setTotalGamesPlayed] = useState<number>(0);
   const [bestScore, setBestScore] = useState<number>(0);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
 
   // Load statistics from localStorage on component mount
   useEffect(() => {
@@ -122,6 +127,34 @@ const ProfessionalWasteGame = () => {
     };
     localStorage.setItem('ecoSortGermanyStats', JSON.stringify(stats));
   }, [totalGamesPlayed, bestScore]);
+
+  // PWA: Handle online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // PWA: Handle install prompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   // Add keyboard shortcuts
   useEffect(() => {
@@ -570,6 +603,20 @@ const ProfessionalWasteGame = () => {
     }
   };
 
+  // PWA Install function
+  const handleInstallClick = async () => {
+    if (!installPrompt) return;
+    
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    }
+    
+    setInstallPrompt(null);
+  };
+
   // Character component
   const Character = () => {
     const getCharacterEmoji = () => {
@@ -633,6 +680,22 @@ const ProfessionalWasteGame = () => {
               )}
 
               {/* Action Buttons */}
+              {/* Offline/Online Status */}
+              <div className={`p-2 rounded-lg ${isOnline ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`} title={isOnline ? 'Online' : 'Offline'}>
+                {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+              </div>
+
+              {/* PWA Install Button */}
+              {installPrompt && (
+                <button
+                  onClick={handleInstallClick}
+                  className="p-2 rounded-lg bg-purple-100 hover:bg-purple-200 transition-colors text-purple-600"
+                  title="Install App"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+              )}
+
               <button
                 onClick={() => setSoundEnabled(!soundEnabled)}
                 className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
@@ -1022,6 +1085,27 @@ const ProfessionalWasteGame = () => {
               <span className="text-sm text-gray-500">
                 Games Played: {totalGamesPlayed} | Best Score: {bestScore}
               </span>
+              
+              {/* PWA Status */}
+              <div className="flex items-center gap-2">
+                <span className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full ${
+                  isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+                  {isOnline ? 'Online' : 'Offline'}
+                </span>
+                
+                {installPrompt && (
+                  <button
+                    onClick={handleInstallClick}
+                    className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full hover:bg-purple-200 transition-colors flex items-center gap-1"
+                  >
+                    <Download className="w-3 h-3" />
+                    Install App
+                  </button>
+                )}
+              </div>
+              
               <button
                 onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"

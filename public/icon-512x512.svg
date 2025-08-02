@@ -1,0 +1,8 @@
+<!-- This is a placeholder for the 512x512 icon -->
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="85" fill="#22c55e"/>
+  <circle cx="256" cy="256" r="160" fill="white"/>
+  <path d="M196 196h120v120H196z" fill="#22c55e"/>
+  <path d="M226 226h60v60h-60z" fill="white"/>
+  <text x="256" y="380" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="white">♻️</text>
+</svg>

@@ -14,6 +14,9 @@
     <meta name="language" content="English" />
     <meta name="theme-color" content="#22c55e" />
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="EcoSort Germany - Master German Waste Separation Rules" />
@@ -35,8 +38,10 @@
     <meta name="mobile-web-app-capable" content="yes" />
     
     <!-- Favicon and Icons -->
-    <link rel="apple-touch-icon" href="/vite.svg" />
-    <link rel="shortcut icon" href="/vite.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="/icon-192x192.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="/icon-512x512.svg" />
+    <link rel="shortcut icon" href="/icon-192x192.svg" />
     
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -117,6 +122,133 @@
             }, 500);
           }
         }, 1000);
+      });
+
+      // Service Worker Registration for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+              
+              // Check for updates
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                if (newWorker) {
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      // New content is available, show update notification
+                      if (confirm('New version available! Would you like to update?')) {
+                        window.location.reload();
+                      }
+                    }
+                  });
+                }
+              });
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later
+        deferredPrompt = e;
+        
+        // Show install button/banner
+        showInstallPromotion();
+      });
+
+      function showInstallPromotion() {
+        // Create install banner
+        const installBanner = document.createElement('div');
+        installBanner.id = 'install-banner';
+        installBanner.innerHTML = `
+          <div style="
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: Inter, sans-serif;
+            font-size: 14px;
+            max-width: 320px;
+            animation: slideUp 0.3s ease-out;
+          ">
+            <span>📱</span>
+            <span>Install EcoSort Germany for quick access!</span>
+            <button onclick="installPWA()" style="
+              background: rgba(255,255,255,0.2);
+              border: 1px solid rgba(255,255,255,0.3);
+              color: white;
+              padding: 4px 12px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 12px;
+            ">Install</button>
+            <button onclick="dismissInstall()" style="
+              background: transparent;
+              border: none;
+              color: white;
+              cursor: pointer;
+              padding: 4px;
+              font-size: 16px;
+            ">✕</button>
+          </div>
+        `;
+        
+        // Add animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+          }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(installBanner);
+      }
+
+      // Install PWA function
+      window.installPWA = () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            dismissInstall();
+          });
+        }
+      };
+
+      // Dismiss install banner
+      window.dismissInstall = () => {
+        const banner = document.getElementById('install-banner');
+        if (banner) {
+          banner.style.animation = 'slideUp 0.3s ease-out reverse';
+          setTimeout(() => banner.remove(), 300);
+        }
+      };
+
+      // Handle app installation
+      window.addEventListener('appinstalled', (evt) => {
+        console.log('App was installed', evt);
+        dismissInstall();
       });
     </script>
   </body>

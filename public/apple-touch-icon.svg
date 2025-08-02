@@ -1,0 +1,8 @@
+<!-- Apple touch icon -->
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="30" fill="#22c55e"/>
+  <circle cx="90" cy="90" r="55" fill="white"/>
+  <path d="M70 70h40v40H70z" fill="#22c55e"/>
+  <path d="M80 80h20v20H80z" fill="white"/>
+  <text x="90" y="130" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="white">♻️</text>
+</svg>
