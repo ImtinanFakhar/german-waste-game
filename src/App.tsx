@@ -1,5 +1,30 @@
-import { useState } from 'react';
-import { ChevronDown, MapPin, Play, RotateCcw } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { 
+  ChevronDown, 
+  MapPin, 
+  Play, 
+  RotateCcw, 
+  Trophy, 
+  Star, 
+  Home, 
+  Settings, 
+  Volume2, 
+  VolumeX,
+  Share2,
+  Award,
+  Target,
+  Clock,
+  Zap,
+  Download,
+  Github,
+  ExternalLink,
+  Info,
+  HelpCircle,
+  BarChart3,
+  Users,
+  Globe,
+  Recycle
+} from 'lucide-react';
 
 // Type definitions
 interface Bin {
@@ -64,10 +89,23 @@ const GermanWasteGame = () => {
   const [gameStats, setGameStats] = useState({ correct: 0, wrong: 0 });
   const [isThrowingAnimation, setIsThrowingAnimation] = useState<boolean>(false);
   const [thrownItem, setThrownItem] = useState<ThrownItem | null>(null);
-  const [characterState, setCharacterState] = useState<string>('idle'); // idle, throwing, celebrating, disappointed
+  const [characterState, setCharacterState] = useState<string>('idle');
   const [celebration, setCelebration] = useState<Celebration | null>(null);
   const [streak, setStreak] = useState<number>(0);
   const [confetti, setConfetti] = useState<Particle[]>([]);
+  
+  // New professional features
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [gameMode, setGameMode] = useState<'tutorial' | 'normal' | 'challenge'>('normal');
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [showLeaderboard, setShowLeaderboard] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [showInstructions, setShowInstructions] = useState<boolean>(false);
+  const [playerName, setPlayerName] = useState<string>('');
+  const [gameHistory, setGameHistory] = useState<any[]>([]);
+  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
+  const [perfectGames, setPerfectGames] = useState<number>(0);
+  const [totalGamesPlayed, setTotalGamesPlayed] = useState<number>(0);
 
   // City data structure
   const cityData: Record<string, CityData> = {
@@ -969,33 +1007,154 @@ const GermanWasteGame = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-emerald-50">
-      {/* Header */}
-      <div className="bg-white shadow-lg border-b border-green-100">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="bg-green-500 p-2 rounded-lg">
-              <Play className="w-6 h-6 text-white" />
+      {/* Professional Header */}
+      <header className="bg-white shadow-xl border-b border-green-100 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Logo and Title */}
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-2 rounded-xl shadow-md">
+                <Recycle className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                  EcoSort Germany
+                </h1>
+                <p className="text-xs md:text-sm text-gray-500">Master German Waste Separation</p>
+              </div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-              German Waste Separation Game
-            </h1>
-          </div>
-          <p className="text-gray-600 text-sm md:text-base">
-            Help our character sort waste correctly! Get fined 100€ for each mistake.
-          </p>
-        </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
+            {/* Navigation Actions */}
+            <div className="flex items-center gap-2">
+              {/* Stats Display */}
+              {gameStarted && (
+                <div className="hidden md:flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+                  <div className="flex items-center gap-1">
+                    <Trophy className="w-4 h-4 text-yellow-500" />
+                    <span className="text-sm font-medium">{score}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Target className="w-4 h-4 text-blue-500" />
+                    <span className="text-sm font-medium">{streak}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4 text-purple-500" />
+                    <span className="text-sm font-medium">R{round}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                title={soundEnabled ? 'Mute sounds' : 'Enable sounds'}
+              >
+                {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </button>
+
+              <button
+                onClick={() => setShowInstructions(true)}
+                className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600"
+                title="How to play"
+              >
+                <HelpCircle className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => setShowLeaderboard(true)}
+                className="p-2 rounded-lg bg-yellow-100 hover:bg-yellow-200 transition-colors text-yellow-600"
+                title="Leaderboard"
+              >
+                <BarChart3 className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                title="View on GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'EcoSort Germany - Waste Separation Game',
+                      text: 'Learn German waste separation rules through this fun interactive game!',
+                      url: window.location.href
+                    });
+                  }
+                }}
+                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
+                title="Share game"
+              >
+                <Share2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Stats Bar */}
+          {gameStarted && (
+            <div className="md:hidden mt-3 flex items-center justify-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-1">
+                <Trophy className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm font-medium">{score}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Target className="w-4 h-4 text-blue-500" />
+                <span className="text-sm font-medium">Streak: {streak}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4 text-purple-500" />
+                <span className="text-sm font-medium">Round {round}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4 py-6">
         {!gameStarted ? (
-          // Game Setup Screen
+          // City Selection Screen
           <div className="space-y-6">
+            {/* Welcome Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6 text-center">
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome to EcoSort Germany! 🇩🇪</h2>
+                <p className="text-gray-600">
+                  Master German waste separation rules across 14 major cities. Each city has unique rules - learn them all!
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-2xl mb-2">🎯</div>
+                  <h3 className="font-semibold text-gray-800">Learn Rules</h3>
+                  <p className="text-sm text-gray-600">Master each city's unique separation rules</p>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="text-2xl mb-2">🏆</div>
+                  <h3 className="font-semibold text-gray-800">Score Points</h3>
+                  <p className="text-sm text-gray-600">Earn points for correct sorting, avoid fines</p>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <div className="text-2xl mb-2">⚡</div>
+                  <h3 className="font-semibold text-gray-800">Build Streaks</h3>
+                  <p className="text-sm text-gray-600">Chain correct answers for bonus points</p>
+                </div>
+              </div>
+            </div>
+
+            {/* City Selection */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-5 h-5 text-green-600" />
                 <h2 className="text-xl font-semibold text-gray-800">Choose Your German City</h2>
                 <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
-                  {cities.length} Cities Available!
+                  {Object.keys(cityData).length} Cities Available!
                 </span>
               </div>
               
@@ -1213,7 +1372,7 @@ const GermanWasteGame = () => {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -4,10 +4,120 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>German Waste Separation Game</title>
+    
+    <!-- Professional Meta Tags -->
+    <title>EcoSort Germany - Master German Waste Separation Rules</title>
+    <meta name="description" content="Learn German waste separation rules through an interactive game! Master recycling across 14 major German cities with our educational game." />
+    <meta name="keywords" content="German waste separation, recycling game, environmental education, Germany recycling rules, waste sorting, educational game" />
+    <meta name="author" content="EcoSort Germany" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="theme-color" content="#22c55e" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EcoSort Germany - Master German Waste Separation Rules" />
+    <meta property="og:description" content="Learn German waste separation rules through an interactive game! Master recycling across 14 major German cities." />
+    <meta property="og:url" content="https://ImtinanFakhar.github.io/german-waste-game" />
+    <meta property="og:site_name" content="EcoSort Germany" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EcoSort Germany - Master German Waste Separation Rules" />
+    <meta name="twitter:description" content="Learn German waste separation rules through an interactive game!" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="EcoSort Germany" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="EcoSort Germany" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    <link rel="shortcut icon" href="/vite.svg" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Professional fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <style>
+      /* Loading screen */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #10b981, #22c55e);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
+      }
+      .loading-screen.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .loading-logo {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        animation: bounce 1s infinite;
+      }
+      .loading-text {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+      }
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <!-- Professional loading screen -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-logo">♻️</div>
+      <div class="loading-text">EcoSort Germany</div>
+      <div class="loading-spinner"></div>
+    </div>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <script>
+      // Hide loading screen when app loads
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loadingScreen = document.getElementById('loading-screen');
+          if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+            setTimeout(() => {
+              loadingScreen.remove();
+            }, 500);
+          }
+        }, 1000);
+      });
+    </script>
   </body>
 </html>
