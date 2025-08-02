@@ -1,0 +1,32 @@
+{
+  "translation": {
+    "title": "German Waste Sorting Game",
+    "select_city": "Select a City",
+    "start_game": "Start Game",
+    "score": "Score",
+    "fines": "Fines",
+    "round": "Round",
+    "throw_away": "Throw Away",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "of": "of",
+    "next_item": "Next Item",
+    "restart_game": "Restart Game",
+    "share_results": "Share Results",
+    "tweet_results": "I scored {{score}} points in the German Waste Sorting Game! Can you beat my score? #GermanWasteGame #Recycling",
+    "game_over": "Game Over",
+    "final_score": "Final Score",
+    "total_fines": "Total Fines",
+    "accuracy": "Accuracy",
+    "feedback_success_base": "Correct! You earned",
+    "feedback_success_streak": "points. Streak x{{streak}}!",
+    "feedback_error": "Oops! That's not the right bin. You've been fined",
+    "points": "points",
+    "city_info": "In {{city}}, the waste is managed by {{authority}}.",
+    "bin_info": "This is the {{binName}}.",
+    "welcome": "Welcome to the German Waste Sorting Game!",
+    "instructions": "Select a city to learn about its waste sorting rules. Then, start the game and drag the trash items to the correct bins.",
+    "sound_on": "Sound On",
+    "sound_off": "Sound Off"
+  }
+}

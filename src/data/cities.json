@@ -1,0 +1,425 @@
+{
+    "berlin": {
+      "name": "Berlin",
+      "authority": "BSR (Berliner Stadtreinigung)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Wertstofftonne",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_packaging", "plastic_bottles", "plastic_containers", "detergent_bottles", "aluminum_materials", "bottle_caps", "candy_wrappers", "toothpaste_tubes"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin", 
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_bags", "envelopes", "magazines", "toilet_paper_rolls", "egg_cartons", "greeting_cards", "notebooks", "shoe_boxes"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤", 
+          "keywords": ["fruit_scraps", "food_leftovers", "coffee_grounds", "garden_waste", "kitchen_scraps", "expired_food", "fish_bones", "nut_shells", "bread_crusts", "salad_leftovers"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_ceramics", "cigarette_butts", "vacuum_bags", "cat_litter", "bandages", "cotton_swabs", "makeup_wipes", "light_bulbs", "corks"]
+        },
+        {
+          "id": "glass",
+          "color": "Glass",
+          "name": "Glass Recycling",
+          "icon": "🫙",
+          "keywords": ["glass_jars", "wine_bottles", "food_containers_glass", "perfume_bottles", "olive_oil_bottles", "food_jars"]
+        }
+      ]
+    },
+    "munich": {
+      "name": "Munich",
+      "authority": "AWM München",
+      "bins": [
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_packaging", "office_paper"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown", 
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["vegetable_scraps", "cooked_food", "garden_waste", "coffee_grounds"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_items", "dirty_packaging"]
+        },
+        {
+          "id": "recycling_island",
+          "color": "Yellow",
+          "name": "Recycling Island",
+          "icon": "♻️",
+          "keywords": ["plastic_packaging", "metal_cans", "glass_jars", "composite_materials"]
+        }
+      ]
+    },
+    "hamburg": {
+      "name": "Hamburg",
+      "authority": "SRH Hamburg", 
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Wertstofftonne",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "plastic_toys", "metal_packaging", "plastic_buckets", "plastic_containers", "frozen_food_bags", "detergent_bottles", "aluminum_materials", "plastic_hangers", "old_tupperware"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵", 
+          "keywords": ["newspapers", "cardboard_packaging", "office_paper", "paper_bags", "magazines", "paper_towel_rolls", "receipts_clean", "greeting_cards", "shoe_boxes", "notebooks"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_waste", "food_leftovers", "expired_food", "meat_scraps", "fruit_pits", "herb_stems", "nut_shells", "vegetable_scraps", "organic_leftovers"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_ceramics", "mixed_materials", "cat_litter", "dust_bags", "feminine_products", "contact_lenses", "nail_clippings", "dental_floss", "hair_clippings"]
+        },
+        {
+          "id": "glass",
+          "color": "Glass",
+          "name": "Glass Collection",
+          "icon": "🫙",
+          "keywords": ["glass_containers", "food_jars", "wine_bottles", "perfume_bottles", "olive_oil_bottles"]
+        }
+      ]
+    },
+    "cologne": {
+      "name": "Cologne (Köln)",
+      "authority": "AWB (Abfallwirtschaftsbetriebe Köln)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_packaging", "aluminum_containers"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard_packaging", "office_paper", "paper_bags"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["food_scraps", "garden_clippings", "organic_waste", "natural_materials"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "mixed_materials", "damaged_goods", "non_recyclable_items"]
+        }
+      ]
+    },
+    "frankfurt": {
+      "name": "Frankfurt am Main",
+      "authority": "FES (FrankfurtEntsorgungs und Service GmbH)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bin/Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_packaging", "styrofoam_packaging"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_packaging", "books_catalogs"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_waste", "food_leftovers", "coffee_filters"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "rubber_items", "broken_household", "cold_ashes"]
+        }
+      ]
+    },
+    "stuttgart": {
+      "name": "Stuttgart",
+      "authority": "AWS (Abfallwirtschaft Stuttgart)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bin",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_cans", "composite_packaging", "styrofoam_packaging"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard_flattened", "paper_packaging", "books_catalogs"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_leaves", "food_leftovers", "coffee_grounds"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_ceramics", "rubber_items", "mixed_materials"]
+        }
+      ]
+    },
+    "dusseldorf": {
+      "name": "Düsseldorf",
+      "authority": "AWISTA (Abfallwirtschaft Düsseldorf)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_materials", "aluminum_packaging"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard_packaging", "office_paper", "paper_bags"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["food_scraps", "garden_waste", "organic_materials", "compostable_items"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "mixed_materials", "broken_items", "non_recyclable_items"]
+        }
+      ]
+    },
+    "leipzig": {
+      "name": "Leipzig",
+      "authority": "Stadtreinigung Leipzig",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bin",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_packaging", "aluminum_containers"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_packaging", "office_paper"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_waste", "food_leftovers", "organic_materials"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_items", "mixed_materials", "non_recyclable_waste"]
+        }
+      ]
+    },
+    "dortmund": {
+      "name": "Dortmund",
+      "authority": "EDG (Entsorgung Dortmund GmbH)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_materials", "styrofoam_packaging"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard_packaging", "paper_bags", "books_catalogs"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["food_scraps", "garden_clippings", "organic_leftovers", "compostable_materials"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_ceramics", "mixed_materials", "non_recyclable_items"]
+        }
+      ]
+    },
+    "essen": {
+      "name": "Essen",
+      "authority": "EBE (Entsorgungsbetriebe Essen)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_cans", "composite_packaging", "aluminum_materials"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_packaging", "office_paper"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_waste", "food_leftovers", "organic_waste"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_items", "mixed_materials", "non_recyclable_items"]
+        }
+      ]
+    },
+    "dresden": {
+      "name": "Dresden",
+      "authority": "SRD (Stadtreinigung Dresden)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bin",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_materials", "aluminum_packaging"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard_packaging", "paper_bags", "books"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["food_scraps", "garden_waste", "organic_leftovers", "natural_materials"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_items", "mixed_materials", "non_recyclable_waste"]
+        }
+      ]
+    },
+    "hannover": {
+      "name": "Hannover",
+      "authority": "aha (Zweckverband Abfallwirtschaft Region Hannover)",
+      "bins": [
+        {
+          "id": "yellow",
+          "color": "Yellow",
+          "name": "Yellow Bag",
+          "icon": "🟡",
+          "keywords": ["plastic_packaging", "metal_packaging", "composite_packaging", "aluminum_containers"]
+        },
+        {
+          "id": "blue",
+          "color": "Blue",
+          "name": "Paper Bin",
+          "icon": "🔵",
+          "keywords": ["newspapers", "cardboard", "paper_packaging", "office_paper"]
+        },
+        {
+          "id": "brown",
+          "color": "Brown",
+          "name": "Organic Bin",
+          "icon": "🟤",
+          "keywords": ["kitchen_scraps", "garden_waste", "food_leftovers", "organic_materials"]
+        },
+        {
+          "id": "grey",
+          "color": "Grey",
+          "name": "Residual Waste",
+          "icon": "⚫",
+          "keywords": ["hygiene_products", "broken_items", "mixed_materials", "non_recyclable_waste"]
+        }
+      ]
+    }
+  }
+  

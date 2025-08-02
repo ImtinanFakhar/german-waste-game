@@ -525,38 +525,30 @@ const GermanWasteGame = () => {
             </div>
 
             {/* Navigation Actions */}
-            <div className="flex items-center gap-3">
-              {/* Language Switcher - Professional Design */}
-              <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
-                <Globe className="w-4 h-4 text-green-600" />
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => changeLanguage('en')}
-                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                      i18n.language === 'en' 
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md transform scale-105' 
-                        : 'text-gray-700 hover:bg-white hover:shadow-sm hover:text-green-600'
-                    }`}
-                  >
-                    EN
-                  </button>
-                  <div className="w-px h-4 bg-green-300"></div>
-                  <button
-                    onClick={() => changeLanguage('de')}
-                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                      i18n.language === 'de' 
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md transform scale-105' 
-                        : 'text-gray-700 hover:bg-white hover:shadow-sm hover:text-green-600'
-                    }`}
-                  >
-                    DE
-                  </button>
-                </div>
+            <div className="flex items-center gap-2">
+              {/* Language Switcher */}
+              <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                    i18n.language === 'en' ? 'bg-green-500 text-white' : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => changeLanguage('de')}
+                  className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                    i18n.language === 'de' ? 'bg-green-500 text-white' : 'text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  DE
+                </button>
               </div>
 
               {/* Stats Display */}
               {gameStarted && (
-                <div className="hidden lg:flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+                <div className="hidden md:flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
                   <div className="flex items-center gap-1">
                     <Trophy className="w-4 h-4 text-yellow-500" />
                     <span className="text-sm font-medium">{score}</span>
@@ -573,85 +565,54 @@ const GermanWasteGame = () => {
               )}
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setSoundEnabled(!soundEnabled)}
-                  className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                  title={soundEnabled ? t('sound_off') : t('sound_on')}
-                >
-                  {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-                </button>
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                title={soundEnabled ? t('sound_off') : t('sound_on')}
+              >
+                {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+              </button>
 
-                <button
-                  onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
-                  className="hidden md:block p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                  title="View on GitHub"
-                >
-                  <Github className="w-4 h-4" />
-                </button>
+              <button
+                onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
+                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                title="View on GitHub"
+              >
+                <Github className="w-4 h-4" />
+              </button>
 
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: t('title'),
-                        text: t('instructions'),
-                        url: window.location.href
-                      });
-                    }
-                  }}
-                  className="hidden md:block p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
-                  title={t('share_results')}
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: t('title'),
+                      text: t('instructions'),
+                      url: window.location.href
+                    });
+                  }
+                }}
+                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
+                title={t('share_results')}
+              >
+                <Share2 className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
           {/* Mobile Stats Bar */}
           {gameStarted && (
-            <div className="lg:hidden mt-3 space-y-3">
-              {/* Game Stats */}
-              <div className="flex items-center justify-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
-                <div className="flex items-center gap-1">
-                  <Trophy className="w-4 h-4 text-yellow-500" />
-                  <span className="text-sm font-medium">{score}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Target className="w-4 h-4 text-blue-500" />
-                  <span className="text-sm font-medium">Streak: {streak}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4 text-purple-500" />
-                  <span className="text-sm font-medium">{t('round')} {round}</span>
-                </div>
+            <div className="md:hidden mt-3 flex items-center justify-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-1">
+                <Trophy className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm font-medium">{score}</span>
               </div>
-              
-              {/* Mobile Action Buttons */}
-              <div className="flex items-center justify-center gap-2">
-                <button
-                  onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
-                  className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                  title="View on GitHub"
-                >
-                  <Github className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: t('title'),
-                        text: t('instructions'),
-                        url: window.location.href
-                      });
-                    }
-                  }}
-                  className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
-                  title={t('share_results')}
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
+              <div className="flex items-center gap-1">
+                <Target className="w-4 h-4 text-blue-500" />
+                <span className="text-sm font-medium">Streak: {streak}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4 text-purple-500" />
+                <span className="text-sm font-medium">{t('round')} {round}</span>
               </div>
             </div>
           )}

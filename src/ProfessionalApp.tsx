@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
-
+  ChevronDown,
   MapPin, 
   Play, 
   RotateCcw, 
@@ -18,8 +19,10 @@ import {
   Award,
   Download,
   Wifi,
-  WifiOff
+  WifiOff,
+  Globe
 } from 'lucide-react';
+import citiesData from './data/cities.json';
 
 // Enhanced interfaces
 interface Bin {
@@ -78,6 +81,8 @@ interface Particle {
 }
 
 const ProfessionalWasteGame = () => {
+  const { t, i18n } = useTranslation();
+  
   // Core game state
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -103,6 +108,14 @@ const ProfessionalWasteGame = () => {
   const [bestScore, setBestScore] = useState<number>(0);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  // Language switcher function
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  // Use imported city data
+  const cityData: Record<string, CityData> = citiesData;
 
   // Load statistics from localStorage on component mount
   useEffect(() => {
@@ -278,82 +291,7 @@ const ProfessionalWasteGame = () => {
   };
 
   // Enhanced city data with professional information
-  const cityData: Record<string, CityData> = {
-    berlin: {
-      name: 'Berlin',
-      authority: 'BSR (Berliner Stadtreinigung)',
-      recyclingRate: 67,
-      population: 3669000,
-      flag: '🏛️',
-      bins: [
-        {
-          id: 'yellow',
-          color: 'Yellow',
-          name: 'Wertstofftonne',
-          icon: '🟡',
-          keywords: ['plastic_packaging', 'metal_packaging', 'composite_packaging', 'plastic_bottles', 'plastic_containers', 'detergent_bottles', 'aluminum_materials', 'bottle_caps', 'candy_wrappers', 'toothpaste_tubes']
-        },
-        {
-          id: 'blue',
-          color: 'Blue',
-          name: 'Paper Bin', 
-          icon: '🔵',
-          keywords: ['newspapers', 'cardboard', 'paper_bags', 'envelopes', 'magazines', 'toilet_paper_rolls', 'egg_cartons', 'greeting_cards', 'notebooks', 'shoe_boxes']
-        },
-        {
-          id: 'brown',
-          color: 'Brown',
-          name: 'Organic Bin',
-          icon: '🟤', 
-          keywords: ['fruit_scraps', 'food_leftovers', 'coffee_grounds', 'garden_waste', 'kitchen_scraps', 'expired_food', 'fish_bones', 'nut_shells', 'bread_crusts', 'salad_leftovers']
-        },
-        {
-          id: 'grey',
-          color: 'Grey',
-          name: 'Residual Waste',
-          icon: '⚫',
-          keywords: ['cigarette_butts', 'diapers', 'cat_litter', 'rubber_gloves', 'broken_toys', 'vacuum_bags', 'tissues', 'dental_floss', 'contact_lenses', 'chewing_gum']
-        }
-      ]
-    },
-    munich: {
-      name: 'Munich',
-      authority: 'AWM (Abfallwirtschaftsbetrieb München)',
-      recyclingRate: 72,
-      population: 1472000,
-      flag: '🍺',
-      bins: [
-        {
-          id: 'yellow',
-          color: 'Yellow',
-          name: 'Wertstofftonne',
-          icon: '🟡',
-          keywords: ['plastic_packaging', 'metal_packaging', 'aluminum_cans', 'tetrapak', 'yogurt_cups', 'bottle_caps', 'plastic_bags', 'foil_packaging', 'spray_cans', 'tin_cans']
-        },
-        {
-          id: 'blue',
-          color: 'Blue',
-          name: 'Paper Bin',
-          icon: '🔵',
-          keywords: ['newspapers', 'cardboard', 'magazines', 'office_paper', 'catalogs', 'paper_bags', 'envelopes', 'notebooks', 'books', 'egg_cartons']
-        },
-        {
-          id: 'brown',
-          color: 'Brown', 
-          name: 'Organic Bin',
-          icon: '🟤',
-          keywords: ['food_leftovers', 'fruit_scraps', 'vegetables_scraps', 'coffee_grounds', 'tea_bags', 'eggshells', 'garden_waste', 'flowers', 'small_bones', 'nut_shells']
-        },
-        {
-          id: 'grey',
-          color: 'Grey',
-          name: 'Residual Waste',
-          icon: '⚫',
-          keywords: ['cigarette_butts', 'diapers', 'cat_litter', 'rubber_items', 'ceramics', 'tissues', 'dust', 'ashes', 'leather_items', 'old_photos']
-        }
-      ]
-    }
-  };
+  // Now loaded from cities.json file
 
   // Comprehensive trash items database
   const trashItems: Record<string, TrashItem> = {
@@ -653,17 +591,45 @@ const ProfessionalWasteGame = () => {
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                  EcoSort Germany
+                  {t('title')}
                 </h1>
                 <p className="text-xs md:text-sm text-gray-500">Master German Waste Separation</p>
               </div>
             </div>
 
             {/* Navigation Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Language Switcher - Professional Design */}
+              <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
+                <Globe className="w-4 h-4 text-green-600" />
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => changeLanguage('en')}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
+                      i18n.language === 'en' 
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md transform scale-105' 
+                        : 'text-gray-700 hover:bg-white hover:shadow-sm hover:text-green-600'
+                    }`}
+                  >
+                    EN
+                  </button>
+                  <div className="w-px h-4 bg-green-300"></div>
+                  <button
+                    onClick={() => changeLanguage('de')}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
+                      i18n.language === 'de' 
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md transform scale-105' 
+                        : 'text-gray-700 hover:bg-white hover:shadow-sm hover:text-green-600'
+                    }`}
+                  >
+                    DE
+                  </button>
+                </div>
+              </div>
+
               {/* Stats Display */}
               {gameStarted && (
-                <div className="hidden md:flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+                <div className="hidden lg:flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
                   <div className="flex items-center gap-1">
                     <Trophy className="w-4 h-4 text-yellow-500" />
                     <span className="text-sm font-medium">{score}</span>
@@ -680,78 +646,101 @@ const ProfessionalWasteGame = () => {
               )}
 
               {/* Action Buttons */}
-              {/* Offline/Online Status */}
-              <div className={`p-2 rounded-lg ${isOnline ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`} title={isOnline ? 'Online' : 'Offline'}>
-                {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
-              </div>
+              <div className="flex items-center gap-2">
+                {/* Offline/Online Status */}
+                <div className={`p-2 rounded-lg ${isOnline ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`} title={isOnline ? 'Online' : 'Offline'}>
+                  {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+                </div>
 
-              {/* PWA Install Button */}
-              {installPrompt && (
+                {/* PWA Install Button */}
+                {installPrompt && (
+                  <button
+                    onClick={handleInstallClick}
+                    className="p-2 rounded-lg bg-purple-100 hover:bg-purple-200 transition-colors text-purple-600"
+                    title="Install App"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
+                )}
+
                 <button
-                  onClick={handleInstallClick}
-                  className="p-2 rounded-lg bg-purple-100 hover:bg-purple-200 transition-colors text-purple-600"
-                  title="Install App"
+                  onClick={() => setSoundEnabled(!soundEnabled)}
+                  className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                  title={soundEnabled ? 'Mute sounds' : 'Enable sounds'}
                 >
-                  <Download className="w-4 h-4" />
+                  {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                 </button>
-              )}
 
-              <button
-                onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                title={soundEnabled ? 'Mute sounds' : 'Enable sounds'}
-              >
-                {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-              </button>
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600"
+                  title="How to play"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </button>
 
-              <button
-                onClick={() => setShowInstructions(true)}
-                className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600"
-                title="How to play"
-              >
-                <HelpCircle className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={() => setShowLeaderboard(true)}
+                  className="p-2 rounded-lg bg-yellow-100 hover:bg-yellow-200 transition-colors text-yellow-600"
+                  title="Statistics"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                </button>
 
-              <button
-                onClick={() => setShowLeaderboard(true)}
-                className="p-2 rounded-lg bg-yellow-100 hover:bg-yellow-200 transition-colors text-yellow-600"
-                title="Statistics"
-              >
-                <BarChart3 className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
+                  className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                  title="View on GitHub"
+                >
+                  <Github className="w-4 h-4" />
+                </button>
 
-              <button
-                onClick={() => window.open('https://github.com/ImtinanFakhar/german-waste-game', '_blank')}
-                className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                title="View on GitHub"
-              >
-                <Github className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={shareGame}
-                className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
-                title="Share game"
-              >
-                <Share2 className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={shareGame}
+                  className="p-2 rounded-lg bg-green-100 hover:bg-green-200 transition-colors text-green-600"
+                  title="Share game"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Mobile Stats Bar */}
           {gameStarted && (
-            <div className="md:hidden mt-3 flex items-center justify-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
-              <div className="flex items-center gap-1">
-                <Trophy className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium">{score}</span>
+            <div className="lg:hidden mt-3 space-y-3">
+              {/* Game Stats */}
+              <div className="flex items-center justify-center gap-4 bg-gray-50 px-4 py-2 rounded-lg">
+                <div className="flex items-center gap-1">
+                  <Trophy className="w-4 h-4 text-yellow-500" />
+                  <span className="text-sm font-medium">{score}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Target className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-medium">Streak: {streak}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4 text-purple-500" />
+                  <span className="text-sm font-medium">{t('round')} {round}/10</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Target className="w-4 h-4 text-blue-500" />
-                <span className="text-sm font-medium">Streak: {streak}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4 text-purple-500" />
-                <span className="text-sm font-medium">Round {round}/10</span>
+              
+              {/* Mobile Action Buttons */}
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="p-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors text-blue-600"
+                  title="How to play"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setShowLeaderboard(true)}
+                  className="p-2 rounded-lg bg-yellow-100 hover:bg-yellow-200 transition-colors text-yellow-600"
+                  title="Statistics"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                </button>
               </div>
             </div>
           )}
@@ -766,9 +755,9 @@ const ProfessionalWasteGame = () => {
             {/* Welcome Section */}
             <div className="bg-white rounded-xl shadow-lg p-6 text-center">
               <div className="mb-4">
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome to EcoSort Germany! 🇩🇪</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('welcome')} 🇩🇪</h2>
                 <p className="text-gray-600">
-                  Master German waste separation rules across different cities. Each city has unique rules - learn them all!
+                  {t('instructions')}
                 </p>
               </div>
               
@@ -795,70 +784,60 @@ const ProfessionalWasteGame = () => {
             <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-5 h-5 text-green-600" />
-                <h2 className="text-xl font-semibold text-gray-800">Choose Your German City</h2>
+                <h2 className="text-xl font-semibold text-gray-800">{t('select_city')}</h2>
                 <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
                   {Object.keys(cityData).length} Cities Available!
                 </span>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(cityData).map(([cityKey, city]) => (
-                  <div
-                    key={cityKey}
-                    onClick={() => setSelectedCity(cityKey)}
-                    className={`cursor-pointer border-2 rounded-lg p-4 transition-all hover:shadow-md ${
-                      selectedCity === cityKey
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-green-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-bold text-lg flex items-center gap-2">
-                        <span className="text-2xl">{city.flag}</span>
-                        {city.name}
-                      </h3>
-                      {selectedCity === cityKey && (
-                        <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600 mb-2">{city.authority}</p>
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>♻️ {city.recyclingRate}% recycling</span>
-                      <span>👥 {(city.population! / 1000000).toFixed(1)}M people</span>
+              <div className="relative mb-6">
+                <select
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  className="w-full md:w-64 p-3 border border-gray-300 rounded-lg bg-white text-gray-800 font-medium appearance-none cursor-pointer hover:border-green-400 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                >
+                  <option value="">{t('select_city')}...</option>
+                  {Object.entries(cityData).map(([cityKey, city]) => (
+                    <option key={cityKey} value={cityKey}>
+                      {city.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+
+              {selectedCity && (
+                <div className="space-y-4">
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h3 className="font-semibold text-green-800 mb-2">🏙️ {t('city_info', { city: cityData[selectedCity].name, authority: cityData[selectedCity].authority })}</h3>
+                  </div>
+                  
+                  {/* Difficulty Selection */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Difficulty Level</h3>
+                    <div className="flex gap-3">
+                      {(['easy', 'medium', 'hard'] as const).map((level) => (
+                        <button
+                          key={level}
+                          onClick={() => setDifficulty(level)}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                            difficulty === level
+                              ? 'bg-green-500 text-white'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {level.charAt(0).toUpperCase() + level.slice(1)}
+                        </button>
+                      ))}
                     </div>
                   </div>
-                ))}
-              </div>
-
-              {/* Difficulty Selection */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Difficulty Level</h3>
-                <div className="flex gap-3">
-                  {(['easy', 'medium', 'hard'] as const).map((level) => (
-                    <button
-                      key={level}
-                      onClick={() => setDifficulty(level)}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                        difficulty === level
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {level.charAt(0).toUpperCase() + level.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Start Game Button */}
-              {selectedCity && (
-                <div className="mt-6 text-center">
+                  
                   <button
                     onClick={startGame}
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-lg font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-lg"
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center gap-2"
                   >
-                    <Play className="w-5 h-5 inline mr-2" />
-                    Start Playing in {cityData[selectedCity].name}
+                    <Play className="w-5 h-5" />
+                    {t('start_game')} in {cityData[selectedCity].name}
                   </button>
                 </div>
               )}
