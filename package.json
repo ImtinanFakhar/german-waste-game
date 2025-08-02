@@ -1,7 +1,7 @@
 {
   "name": "german-waste-separation-game",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "An interactive game to learn German waste separation rules across 14 major cities",
   "author": "Your Name",
