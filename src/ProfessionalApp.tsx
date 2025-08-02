@@ -107,6 +107,13 @@ const ProfessionalWasteGame = () => {
   const [bestScore, setBestScore] = useState<number>(0);
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
+  
+  // Enhanced game features
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
+  const [gameMode, setGameMode] = useState<'classic' | 'timed' | 'endless'>('classic');
+  const [multiplier, setMultiplier] = useState<number>(1);
+  const [showHint, setShowHint] = useState<boolean>(false);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 
   // Language switcher function
   const changeLanguage = (lng: string) => {
@@ -139,6 +146,15 @@ const ProfessionalWasteGame = () => {
     };
     localStorage.setItem('ecoSortGermanyStats', JSON.stringify(stats));
   }, [totalGamesPlayed, bestScore]);
+
+  // Cleanup timer on component unmount
+  useEffect(() => {
+    return () => {
+      if (timerId) {
+        clearInterval(timerId);
+      }
+    };
+  }, [timerId]);
 
   // PWA: Handle online/offline status
   useEffect(() => {
@@ -292,18 +308,73 @@ const ProfessionalWasteGame = () => {
   // Enhanced city data with professional information
   // Now loaded from cities.json file
 
-  // Comprehensive trash items database
+  // Timer functionality
+  const startTimer = () => {
+    // Clear any existing timer
+    if (timerId) {
+      clearInterval(timerId);
+    }
+    
+    const timer = setInterval(() => {
+      setTimeRemaining(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setTimerId(null);
+          endGame();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    setTimerId(timer);
+  };
+
+  // Hint system
+  const getHint = () => {
+    if (!currentTrashItem || !selectedCity) return '';
+    
+    const correctBin = cityData[selectedCity].bins.find(bin => bin.id === currentTrashItem.correctBin);
+    
+    const hints = [
+      `💡 Think about the material: ${currentTrashItem.description}`,
+      `🎯 This goes in the ${correctBin?.color} bin`,
+      `📍 Check the ${correctBin?.name} for this type of waste`,
+      `🤔 Consider: Is this ${currentTrashItem.difficulty} to sort?`
+    ];
+    
+    return hints[Math.floor(Math.random() * hints.length)];
+  };
+
+  // Comprehensive trash items database - Expanded with more realistic items
   const trashItems: Record<string, TrashItem> = {
+    // Easy items
     plastic_packaging: { name: 'Plastic Package', emoji: '📦', correctBin: 'yellow', description: 'Recyclable plastic packaging', difficulty: 'easy' },
     metal_packaging: { name: 'Metal Can', emoji: '🥫', correctBin: 'yellow', description: 'Aluminum/tin cans and packaging', difficulty: 'easy' },
     newspapers: { name: 'Newspaper', emoji: '📰', correctBin: 'blue', description: 'Print media and paper', difficulty: 'easy' },
     cardboard: { name: 'Cardboard Box', emoji: '📦', correctBin: 'blue', description: 'Cardboard packaging material', difficulty: 'easy' },
     fruit_scraps: { name: 'Apple Core', emoji: '🍎', correctBin: 'brown', description: 'Organic fruit waste', difficulty: 'easy' },
     food_leftovers: { name: 'Food Scraps', emoji: '🍽️', correctBin: 'brown', description: 'Leftover food waste', difficulty: 'easy' },
+    plastic_bottles: { name: 'Plastic Bottle', emoji: '🧴', correctBin: 'yellow', description: 'Recyclable plastic container', difficulty: 'easy' },
+    
+    // Medium items
+    coffee_grounds: { name: 'Coffee Grounds', emoji: '☕', correctBin: 'brown', description: 'Organic coffee waste', difficulty: 'medium' },
     cigarette_butts: { name: 'Cigarette Butt', emoji: '🚬', correctBin: 'grey', description: 'Non-recyclable waste', difficulty: 'medium' },
     diapers: { name: 'Used Diaper', emoji: '👶', correctBin: 'grey', description: 'Hygiene waste', difficulty: 'medium' },
-    plastic_bottles: { name: 'Plastic Bottle', emoji: '🧴', correctBin: 'yellow', description: 'Recyclable plastic container', difficulty: 'easy' },
-    coffee_grounds: { name: 'Coffee Grounds', emoji: '☕', correctBin: 'brown', description: 'Organic coffee waste', difficulty: 'medium' }
+    pizza_box: { name: 'Pizza Box', emoji: '🍕', correctBin: 'blue', description: 'Clean cardboard (if not greasy)', difficulty: 'medium' },
+    yogurt_container: { name: 'Yogurt Container', emoji: '🥛', correctBin: 'yellow', description: 'Plastic packaging after cleaning', difficulty: 'medium' },
+    wine_bottle: { name: 'Wine Bottle', emoji: '🍷', correctBin: 'yellow', description: 'Glass packaging', difficulty: 'medium' },
+    banana_peel: { name: 'Banana Peel', emoji: '🍌', correctBin: 'brown', description: 'Organic fruit waste', difficulty: 'medium' },
+    
+    // Hard items
+    light_bulb: { name: 'Light Bulb', emoji: '💡', correctBin: 'grey', description: 'Special waste - not recyclable', difficulty: 'hard' },
+    batteries: { name: 'Batteries', emoji: '🔋', correctBin: 'grey', description: 'Hazardous waste - special disposal', difficulty: 'hard' },
+    teabag: { name: 'Tea Bag', emoji: '☕', correctBin: 'brown', description: 'Organic waste (without staples)', difficulty: 'hard' },
+    mirror: { name: 'Broken Mirror', emoji: '🪞', correctBin: 'grey', description: 'Special glass - not recyclable', difficulty: 'hard' },
+    medicine: { name: 'Old Medicine', emoji: '💊', correctBin: 'grey', description: 'Hazardous waste - pharmacy disposal', difficulty: 'hard' },
+    cat_litter: { name: 'Cat Litter', emoji: '🐱', correctBin: 'grey', description: 'Non-compostable animal waste', difficulty: 'hard' },
+    receipt: { name: 'Thermal Receipt', emoji: '🧾', correctBin: 'grey', description: 'Thermal paper not recyclable', difficulty: 'hard' },
+    nail_polish: { name: 'Nail Polish', emoji: '💅', correctBin: 'grey', description: 'Chemical waste - hazardous disposal', difficulty: 'hard' }
   };
 
   // Game functions
@@ -355,7 +426,17 @@ const ProfessionalWasteGame = () => {
     setFeedback(null);
     setCelebration(null);
     setConfetti([]);
+    setMultiplier(1);
+    setShowHint(false);
     setTotalGamesPlayed(prev => prev + 1);
+    
+    // Set up timed mode if selected
+    if (gameMode === 'timed') {
+      setTimeRemaining(120); // 2 minutes
+      startTimer();
+    } else {
+      setTimeRemaining(0);
+    }
     
     // Play game start sound
     playSound('success');
@@ -441,12 +522,21 @@ const ProfessionalWasteGame = () => {
         setThrownItem(null);
         setCharacterState('idle');
         
-        if (round >= 10) {
+        // Check end game conditions based on game mode
+        if (gameMode === 'classic' && round >= 10) {
           endGame();
-        } else {
-          setRound(prev => prev + 1);
+        } else if (gameMode === 'timed' && timeRemaining <= 0) {
+          endGame();
+        } else if (gameMode === 'endless' || (gameMode === 'classic' && round < 10) || (gameMode === 'timed' && timeRemaining > 0)) {
+          // Continue game - increment round for classic mode only
+          if (gameMode === 'classic') {
+            setRound(prev => prev + 1);
+          } else if (gameMode === 'endless') {
+            setRound(prev => prev + 1); // Track rounds for stats even in endless mode
+          }
           const newItem = generateTrashItem();
           setCurrentTrashItem(newItem);
+          setShowHint(false); // Close hint when new item appears
         }
         
         setTimeout(() => setFeedback(null), 3000);
@@ -456,6 +546,12 @@ const ProfessionalWasteGame = () => {
   };
 
   const endGame = () => {
+    // Clear any running timer
+    if (timerId) {
+      clearInterval(timerId);
+      setTimerId(null);
+    }
+    
     const finalScore = score - fines;
     if (finalScore > bestScore) {
       setBestScore(finalScore);
@@ -465,6 +561,10 @@ const ProfessionalWasteGame = () => {
       // Play regular completion sound
       playSound('success');
     }
+    
+    // Close any open hints
+    setShowHint(false);
+    
     // Could save to localStorage here
   };
 
@@ -491,6 +591,12 @@ const ProfessionalWasteGame = () => {
   };
 
   const resetGame = () => {
+    // Clear any running timer
+    if (timerId) {
+      clearInterval(timerId);
+      setTimerId(null);
+    }
+    
     setGameStarted(false);
     setSelectedCity('');
     setCurrentTrashItem(null);
@@ -502,6 +608,9 @@ const ProfessionalWasteGame = () => {
     setCelebration(null);
     setConfetti([]);
     setCharacterState('idle');
+    setTimeRemaining(0);
+    setShowHint(false);
+    setMultiplier(1);
   };
 
   const shareGame = async () => {
@@ -639,8 +748,16 @@ const ProfessionalWasteGame = () => {
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4 text-purple-500" />
-                    <span className="text-sm font-medium">R{round}</span>
+                    <span className="text-sm font-medium">
+                      {gameMode === 'timed' ? `${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}` : 
+                       gameMode === 'endless' ? `R${round}` : `R${round}/10`}
+                    </span>
                   </div>
+                  {multiplier > 1 && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm font-bold text-orange-500">{multiplier}x</span>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -811,6 +928,49 @@ const ProfessionalWasteGame = () => {
                     <h3 className="font-semibold text-green-800 mb-2">🏙️ {t('city_info', { city: cityData[selectedCity].name, authority: cityData[selectedCity].authority })}</h3>
                   </div>
                   
+                  {/* Game Mode Selection */}
+                  <div className="pt-4 border-t border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Game Mode</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <button
+                        onClick={() => setGameMode('classic')}
+                        className={`p-3 rounded-lg border-2 transition-all ${
+                          gameMode === 'classic'
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-gray-200 hover:border-green-300'
+                        }`}
+                      >
+                        <div className="text-lg mb-1">🎯</div>
+                        <div className="font-medium">Classic</div>
+                        <div className="text-xs text-gray-600">10 rounds</div>
+                      </button>
+                      <button
+                        onClick={() => setGameMode('timed')}
+                        className={`p-3 rounded-lg border-2 transition-all ${
+                          gameMode === 'timed'
+                            ? 'border-blue-500 bg-blue-50'
+                            : 'border-gray-200 hover:border-blue-300'
+                        }`}
+                      >
+                        <div className="text-lg mb-1">⏱️</div>
+                        <div className="font-medium">Timed</div>
+                        <div className="text-xs text-gray-600">2 minutes</div>
+                      </button>
+                      <button
+                        onClick={() => setGameMode('endless')}
+                        className={`p-3 rounded-lg border-2 transition-all ${
+                          gameMode === 'endless'
+                            ? 'border-purple-500 bg-purple-50'
+                            : 'border-gray-200 hover:border-purple-300'
+                        }`}
+                      >
+                        <div className="text-lg mb-1">♾️</div>
+                        <div className="font-medium">Endless</div>
+                        <div className="text-xs text-gray-600">No limit</div>
+                      </button>
+                    </div>
+                  </div>
+                  
                   {/* Difficulty Selection */}
                   <div className="pt-4 border-t border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-800 mb-3">Difficulty Level</h3>
@@ -921,7 +1081,7 @@ const ProfessionalWasteGame = () => {
                     <div className="text-4xl mb-2">{currentTrashItem.emoji}</div>
                     <div className="font-bold text-gray-800">{currentTrashItem.name}</div>
                     <div className="text-sm text-gray-600">{currentTrashItem.description}</div>
-                    <div className="mt-2">
+                    <div className="mt-2 flex items-center justify-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         currentTrashItem.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
                         currentTrashItem.difficulty === 'hard' ? 'bg-red-100 text-red-800' :
@@ -929,7 +1089,29 @@ const ProfessionalWasteGame = () => {
                       }`}>
                         {currentTrashItem.difficulty}
                       </span>
+                      <button
+                        onClick={() => setShowHint(!showHint)}
+                        className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
+                          showHint 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-blue-100 hover:bg-blue-200 text-blue-800'
+                        }`}
+                        title={showHint ? "Hide hint" : "Get hint"}
+                      >
+                        💡 {showHint ? 'Hide' : 'Hint'}
+                      </button>
                     </div>
+                    {showHint && (
+                      <div className="mt-2 p-2 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 relative">
+                        <button
+                          onClick={() => setShowHint(false)}
+                          className="absolute top-1 right-1 text-blue-600 hover:text-blue-800 text-xs"
+                        >
+                          ×
+                        </button>
+                        {getHint()}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1004,10 +1186,13 @@ const ProfessionalWasteGame = () => {
               <div className="mt-6 text-center">
                 <div className="bg-white rounded-lg p-3 inline-block shadow-md">
                   <div className="text-sm text-gray-600">
-                    Playing in {cityData[selectedCity].name} • Round {round}/10
+                    Playing in {cityData[selectedCity].name} • 
+                    {gameMode === 'classic' ? ` Round ${round}/10` : 
+                     gameMode === 'timed' ? ` Time: ${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}` :
+                     ` Round ${round} (Endless)`}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    Authority: {cityData[selectedCity].authority}
+                    Authority: {cityData[selectedCity].authority} • Mode: {gameMode.charAt(0).toUpperCase() + gameMode.slice(1)}
                   </div>
                 </div>
               </div>
